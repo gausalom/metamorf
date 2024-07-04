@@ -25,8 +25,8 @@ dependencies = [
 packages = ["metamorf", "metamorf.engines", "metamorf.tools"]
 
 [project.urls]
-"Homepage" = "https://github.com/drkoal/metamorf"
-"Bug Tracker" = "https://github.com/drkoal/metamorf/issues"
+"Homepage" = "https://github.com/gausalom/metamorf"
+"Bug Tracker" = "https://github.com/gausalom/metamorf/issues"
 
 [project.scripts]
 metamorf = "metamorf.main:main"
