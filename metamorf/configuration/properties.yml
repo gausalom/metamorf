@@ -1,0 +1,140 @@
+name: "Metamorf"
+description: "Metadata Suite to build and manage your Datawarehouse metadata-driven"
+version: "0.5.1"
+author: "Guillermo Aumatell Salom"
+contact: "guillermoaumatell@gmail.com"
+
+commands:
+  - name: 'help'
+    description: 'Shows all the commands available.'
+  - name: 'manifest'
+    description: 'Generates a Manifest Json File.'
+  - name: 'api'
+    description: 'Deploys an API that serve all the metadata information.'
+  - name: 'validate'
+    description: 'Validates the configuration file.'
+  - name: 'init'
+    description: 'Metamorf Initialization on the current directory.'
+    args:
+      - name: 'database'
+        options: ['-d', '--database']
+        values: ['SQLite', 'Snowflake', 'MySQL', 'PostgreSQL']
+      - name: 'metadata'
+        options: ['-m', '--metadata']
+        values: ['SQLite', 'Snowflake', 'MySQL', 'PostgreSQL']
+  - name: 'deploy'
+    description: 'Deploys on the metadata database all the requirements.'
+  - name: 'deploy-example'
+    description: 'Deploys on the metadata database all the requirement with metadata information and example data on the data database an example.'
+  - name: 'download'
+    description: 'Downloads the Metadata Entry of the Owner selected on CSV files, on the directory [entry].'
+    args:
+      - name: 'select'
+        options: ['-s', '--select']
+        values: ['entry_order', 'entry_aggregators','entry_filters', 'entry_path', 'entry_dataset_mappings','entry_dataset_relationships','entry_entity', '*', 'all']
+      - name: 'owner'
+        options: ['-o', '--owner']
+        accept_all_values: 'Y'
+        values: ['default']
+  - name: 'upload'
+    description: 'Uploads the Metadata Entry on the Metadata Database.'
+    args:
+      - name: 'select'
+        options: [ '-s', '--select' ]
+        values: [ 'entry_order', 'entry_aggregators','entry_filters', 'entry_path', 'entry_dataset_mappings','entry_dataset_relationships','entry_entity', '*', 'all' ]
+  - name: 'commit'
+    description: 'Commits the actual metadata from your owner.'
+  - name: 'recover'
+    description: 'Recover the last commit metadata of your owner.'
+    args:
+      - name: 'select'
+        options: [ '-s', '--select' ]
+        values: ['entry_order', 'entry_aggregators','entry_filters', 'entry_path', 'entry_dataset_mappings','entry_dataset_relationships','entry_entity', '*', 'all']
+  - name: 'process'
+    description: 'Process all the metadata entry to promote the metadata.'
+  - name: 'run'
+    description: 'Execute the processes of the metadata.'
+    args:
+      - name: 'select'
+        accept_all_values: 'Y'
+        options: [ '-s', '--select' ]
+        values: [ '*', 'all' ]
+  - name: 'output'
+    description: 'Generates the files of the processes on the output directory.'
+    args:
+      - name: 'select'
+        options: ['-s','--select']
+        accept_all_values: 'Y'
+        values: [ '*', 'all']
+  - name: 'delete'
+    description: 'Deletes all the metadata from the owner.'
+  - name: 'backup'
+    description: 'Downloads all the Metadata onto CSV Files to backup all the system'
+  - name: 'restore'
+    description: 'Restores all the metadata from a backup.'
+  - name: 'files'
+    description: 'Upload all the files that are indicated on the metadata.'
+  - name: 'metadata'
+    description: 'Validates Metadata Entry.'
+
+
+options:
+  log_print: 'Y'
+  print_debug: 'N'
+  max_commit_batch: 100
+  max_size_mega_bytes_log_file: 5
+
+modules:
+  - name: "elt"
+    description: "Module to create SQL transformations."
+    version: 0.4.2
+    functions:
+      - name: "status"
+        values: ['ACTIVE']
+      - name: "threads"
+        values: [1,2,3,4,5,6,7,8,9,10]
+      - name: "execution"
+        values: ['stop-on-errors', 'run']
+      - name: "on_schema_change"
+        values: ['append', 'ignore']
+      - name: "create_database"
+        values: [true, false]
+      - name: "create_schema"
+        values: [true, false]
+  - name: "datavault"
+    description: "Module to load all the DataVault entities: Hubs, Links, Satellites, ..."
+    version: 0.2.1
+    functions:
+      - name: "status"
+        values: ['ACTIVE','INACTIVE']
+      - name: "char_separator_naming"
+        values: ['_', '__', '$', '&', '/', '|','||']
+        accept_all_values: 'Y'
+      - name: "hash"
+        values: ['md5', 'sha256']
+
+database:
+  - name: 'SQLite'
+    mandatory_fields: ['sqlite_path']
+  - name: 'Snowflake'
+    mandatory_fields: ['snowflake_user', 'snowflake_password', 'snowflake_schema', 'snowflake_warehouse', 'snowflake_account', 'snowflake_database', 'snowflake_role']
+  - name: 'Firebird'
+    mandatory_fields: ['firebird_host', 'firebird_database', 'firebird_user', 'firebird_password']
+  - name: 'MySQL'
+    mandatory_fields: ['mysql_user', 'mysql_password', 'mysql_host', 'mysql_database']
+  - name: 'PostgreSQL'
+    mandatory_fields: ['postgres_user','postgres_password','postgres_host','postgres_database', 'postgres_schema']
+
+output:
+  type: ['dbt', 'sql']
+
+api:
+  port: 5555
+  host: localhost
+
+logo: "\n
+._____     _                     ___ \n
+|     |___| |_ ___ _____ ___ ___|  _|\n
+| | | | -_|  _| .'|     | . |  _|  _|\n
+|_|_|_|___|_| |__,|_|_|_|___|_| |_|  
+"

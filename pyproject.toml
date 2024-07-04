@@ -1,0 +1,36 @@
+[project]
+name = "Metamorf"
+version = "0.5.1"
+authors = [
+  { name="Guillermo Aumatell", email="guillermoaumatell@gmail.com" },
+]
+description = "Metadata Suite to build and manage your Datawarehouse"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "snowflake-connector-python",
+    "PyYAML",
+    "Flask",
+    "psycopg2-binary",
+    "mysql-connector-python"
+]
+
+[tool.setuptools]
+packages = ["metamorf", "metamorf.engines", "metamorf.tools"]
+
+[project.urls]
+"Homepage" = "https://github.com/drkoal/metamorf"
+"Bug Tracker" = "https://github.com/drkoal/metamorf/issues"
+
+[project.scripts]
+metamorf = "metamorf.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "snowflake-connector-python", "PyYAML", "Flask", "psycopg2-binary"]
+build-backend = "setuptools.build_meta"
